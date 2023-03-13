@@ -1,21 +1,21 @@
-# TODO 14: Remove mysqrt.cxx from the list of sources
+add_library(MathFunctions MathFunctions.cxx)
 
-# TODO 1: Add a library called MathFunctions with sources MathFunctions.cxx
-# and mysqrt.cxx
-# Hint: You will need the add_library command
-add_library(MathFunctions mysqrt.cxx)
+# TODO 1: State that anybody linking to MathFunctions needs to include the
+# current source directory, while MathFunctions itself doesn't.
+# Hint: Use target_include_directories with the INTERFACE keyword
+target_include_directories(MathFunctions
+                            INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
-# TODO 7: Create a variable USE_MYMATH using option and set default to ON
-option(USE_MYMATH ON)
-# TODO 8: If USE_MYMATH is ON, use target_compile_definitions to pass
-# USE_MYMATH as a precompiled definition to our source files
-if(USE_MYMATH)
-  add_subdirectory(MathFunctions)
-  list(APPEND EXTRA_LIBS MathFunctions)
-  list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/MathFunctions")
+# should we use our own math functions
+option(USE_MYMATH "Use tutorial provided math implementation" ON)
+if (USE_MYMATH)
+  target_compile_definitions(MathFunctions PRIVATE "USE_MYMATH")
+
+  # library that just does sqrt
+  add_library(SqrtLibrary STATIC
+              mysqrt.cxx
+              )
+
+  target_link_libraries(MathFunctions PUBLIC SqrtLibrary)
 endif()
-
-# TODO 12: When USE_MYMATH is ON, add a library for SqrtLibrary with
-# source mysqrt.cxx
-
-# TODO 13: When USE_MYMATH is ON, link SqrtLibrary to the MathFunctions Library

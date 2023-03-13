@@ -2,27 +2,35 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-// TODO 11: Include TutorialConfig.h
+
+// TODO 5: Include MathFunctions.h
+#ifdef USE_MYMATH
+#  include "MathFunctions.h"
+#endif
 #include "TutorialConfig.h"
 
 int main(int argc, char* argv[])
 {
   if (argc < 2) {
-    // TODO 12: Create a print statement using Tutorial_VERSION_MAJOR
-    //          and Tutorial_VERSION_MINOR
-    // std::cout << "Usage: " << argv[0] << " number" << std::endl;
-    std::cout << "Usage: " << argv[0] << " VERSION ";
-    std::cout << Tutorial_VERSION_MAJOR << "." << Tutorial_VERSION_MINOR << std::endl;
+    // report version
+    std::cout << argv[0] << " Version " << Tutorial_VERSION_MAJOR << "."
+              << Tutorial_VERSION_MINOR << std::endl;
+    std::cout << "Usage: " << argv[0] << " number" << std::endl;
     return 1;
   }
 
   // convert input to double
-  // TODO 4: Replace atof(argv[1]) with std::stod(argv[1])
   const double inputValue = std::stod(argv[1]);
-  // const double inputValue = atof(argv[1]);
+
+  // TODO 6: Replace sqrt with mathfunctions::sqrt
 
   // calculate square root
-  const double outputValue = sqrt(inputValue);
+  // const double outputValue = sqrt(inputValue);
+  #ifdef USE_MYMATH
+    const double outputValue = mysqrt(inputValue);
+  #else
+    const double outputValue = sqrt(inputValue);
+  #endif
   std::cout << "The square root of " << inputValue << " is " << outputValue
             << std::endl;
   return 0;
